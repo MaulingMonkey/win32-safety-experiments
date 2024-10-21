@@ -1,5 +1,6 @@
 [package]
 name    = "maulingmonkey-win32-safety-experiments"
+repository = "https://github.com/MaulingMonkey/win32-safety-experiments"
 version = "0.0.0-git"
 edition = "2021"
 

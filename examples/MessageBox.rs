@@ -1,35 +1,15 @@
+use maulingmonkey_win32_safety_experiments::*;
 use abistr::CStrNonNull;
-
 use bytemuck::Zeroable;
-
-use firehazard::policy::*;
-
+use firehazard::policy::set_process_mitigation_policy;
 use hwnd0::NonNullHWND;
-
-use winapi::shared::basetsd::*;
-use winapi::shared::minwindef::*;
-use winapi::shared::winerror::*;
-use winapi::um::winnt::*;
-use winapi::um::winuser::*;
-
+use winapi::shared::winerror::{ERROR_INVALID_MSGBOX_STYLE, ERROR_INVALID_WINDOW_HANDLE};
+use winapi::um::winnt::PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY;
 use winresult::ErrorCode;
 
-use core::ffi::*;
 
 
-
-//#[allow(non_camel_case_types)]
-//type DWORD_PTR  = usize;
-
-include!("../functions/GetLastError.rs");
-include!("../functions/MessageBoxA.rs");
-include!("../functions/MessageBoxExA.rs");
-include!("../functions/MessageBoxIndirectA.rs");
-include!("../functions/SetLastError.rs");
-include!("../structures/MSGBOXPARAMSA.rs");
-
-
-
+#[allow(deprecated)]
 fn main() {
     let caption         = unsafe { CStrNonNull::from_units_with_nul_unchecked(b"caption\0") };
     let text            = unsafe { CStrNonNull::from_units_with_nul_unchecked(b"text\0") };

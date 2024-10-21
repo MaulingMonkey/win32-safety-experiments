@@ -1,12 +1,12 @@
 unsafe extern "system" {
     /// \[[microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messageboxindirecta)\]
-    /// `MessageBoxIndirectA` &mdash;
+    /// Show a message dialog box with maximum parameterization.
     ///
     ///
     ///
     /// ## ⚠️ Prefer `MessageBoxIndirectW` ⚠️
     ///
-    /// Windows 10.0.19045.5011 assumes [`MSGBOXPARAMSA::lpText`] and [`MSGBOXPARAMSA::lpCaption`] use the system locale, and simply converts these strings to UTF-16 via <code>MBToWCSEx(CP_ACP, ...)</code> before invoking `MessageBox...W`.
+    /// Windows 10.0.19045.5011 assumes [`MSGBOXPARAMSA::lpszText`] and [`MSGBOXPARAMSA::lpszCaption`] use the system locale, and simply converts these strings to UTF-16 via <code>MBToWCSEx(CP_ACP, ...)</code> before invoking `MessageBox...W`.
     /// This assumption is likely mistaken, and will result in [Mojibake](https://en.wikipedia.org/wiki/Mojibake) if you feed it ASCII-based strings on a Japanese Shift-JIS system, replacing e.g. `|` with `¥` (`0x5C`), and `~` with `‾` (`0x7E`).
     /// Microsoft [recommends](https://learn.microsoft.com/en-us/windows/win32/intl/unicode) using the codepage-agnostic [UTF-16]ish `wchar_t`-based `*W` APIs that work directly with Windows&nbsp;NT's native internal encoding.
     ///
@@ -14,7 +14,7 @@ unsafe extern "system" {
     ///
     /// ### Safety
     ///
-    /// *   <code>lpmbp.[cbSize](MSGBOXPARAMSA::cbSize)</code> cannot be larger than <code>[size_of](core::mem::size_of)::\<[MSGBOXPARAMSA]\>()</code>.
+    /// *   <code>lpmbp.[cbSize](MSGBOXPARAMSA::cbSize)</code> cannot be larger than <code>[size_of]::\<[MSGBOXPARAMSA]\>()</code>.
     /// *   <code>lpmbp.[lpfnMsgBoxCallback](MSGBOXPARAMSA::lpfnMsgBoxCallback)</code> is `unsafe` and will be called, as will unsafe wndprocs handling `WM_HELP`.  Likely sources of Undefined Behavior include:
     ///     *   Reading [`HELPINFO`] beyond <code>[HELPINFO::cbSize]</code>.
     ///     *   Interpreting <code>[HELPINFO::dwContextId]</code> as a pointer.
@@ -97,7 +97,9 @@ unsafe extern "system" {
     ///
     /// [UTF-16]:               https://en.wikipedia.org/wiki/UTF-16
     /// [Mojibake]:             https://en.wikipedia.org/wiki/Mojibake
-    unsafe fn MessageBoxIndirectA(
+    ///
+    #[deprecated = "Prefer `MessageBoxIndirectW` instead of relying on CP_ACP and risking Mojibake"]
+    pub unsafe fn MessageBoxIndirectA(
         lpmbp: &MSGBOXPARAMSA,
     ) -> c_int;
 }

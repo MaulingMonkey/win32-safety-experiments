@@ -1,6 +1,6 @@
 unsafe extern "system" {
     /// \[[microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messageboxa)\]
-    /// `MessageBoxExA` &mdash; Display a message dialog box using the specified `LANGID`.
+    /// Show a message dialog box using the specified `LANGID`.
     ///
     ///
     ///
@@ -15,7 +15,7 @@ unsafe extern "system" {
     /// ## Safe
     ///
     /// Parameters are well validated.
-    /// The only possible source of undefined behavior would be failing to `\0`-terminate your strings, which this binding avoids via <code>[abistr]::[NonNull]</code>.
+    /// The only possible source of undefined behavior would be failing to `\0`-terminate your strings, which this binding avoids via <code>[abistr]::[CStrNonNull](abistr::CStrNonNull)</code>.
     ///
     ///
     ///
@@ -119,7 +119,8 @@ unsafe extern "system" {
     /// [UTF-16]:               https://en.wikipedia.org/wiki/UTF-16
     /// [Mojibake]:             https://en.wikipedia.org/wiki/Mojibake
     ///
-    safe fn MessageBoxExA(
+    #[deprecated = "Prefer `MessageBoxExW` instead of relying on CP_ACP and risking Mojibake"]
+    pub safe fn MessageBoxExA(
         hWnd:           Option<::hwnd0::NonNullHWND>,
         lpText:         Option<::abistr::CStrNonNull<::abistr::encoding::windows::System>>,
         lpCaption:      Option<::abistr::CStrNonNull<::abistr::encoding::windows::System>>,

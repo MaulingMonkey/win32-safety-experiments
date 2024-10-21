@@ -1,6 +1,6 @@
 unsafe extern "system" {
     /// \[[microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/errhandlingapi/nf-errhandlingapi-setlasterror)\]
-    /// Set `dwErrCode` for a later caller to query by <code>[GetLastError]\(\)</code>.
+    /// Set the current thread's <code>[GetLastError]\(\)</code> result.
     ///
     ///
     ///
@@ -18,5 +18,5 @@ unsafe extern "system" {
     /// | Header        | `<windows.h>` (→ `<errhandlingapi.h>`)
     /// | DLL           | `kernel32.dll`
     ///
-    safe fn SetLastError(dwErrCode: ::winresult::ErrorHResultOrCode);
+    pub safe fn SetLastError(dwErrCode: ::winresult::ErrorHResultOrCode);
 }
